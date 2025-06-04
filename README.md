@@ -9,7 +9,7 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ### Features
 
-- 🚧 1. **Lane Detection & Departure Warning**
+🚧 1. **Lane Detection & Departure Warning**
 
 * Detect lane markings using edge detection, perspective transforms, or deep learning.
 * Alert when vehicle drifts out of lane (without using turn signals).
@@ -18,14 +18,14 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ---
 
-- 🚗 2. **Forward Collision Warning (FCW)**
+🚗 2. **Forward Collision Warning (FCW)**
 
 * Detect vehicles ahead and estimate Time-to-Collision (TTC).
 * Alert if you're approaching another vehicle too fast.
 
 **Tools:** YOLOv5 or YOLO-NAS, depth estimation (monocular)
 
-- 🚦 3. **Traffic Sign Recognition**
+🚦 3. **Traffic Sign Recognition**
 
 * Detect and classify traffic signs (stop, speed limit, yield, etc.).
 * Works well with pre-trained models and datasets like GTSRB.
@@ -34,7 +34,7 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ---
 
-- 🚶 4. **Pedestrian Detection**
+🚶 4. **Pedestrian Detection**
 
 * Identify pedestrians crossing or standing on the road.
 * Useful for low-speed environments (urban, parking lots).
@@ -43,7 +43,7 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ---
 
-- 🚓 5. **Vehicle Detection & Tracking**
+🚓 5. **Vehicle Detection & Tracking**
 
 * Detect cars, trucks, bikes, buses on the road.
 * Track multiple objects over time using DeepSORT, Kalman Filters.
@@ -52,7 +52,7 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ---
 
-- 📏 6. **Distance Estimation**
+📏 6. **Distance Estimation**
 
 * Approximate distance to detected objects using:
 
@@ -61,7 +61,7 @@ System that helps drivers that doesn't have any advanced features with one camer
 
 ---
 
-- 🧠 7. **Driver Alerts & Logging**
+ 🧠 7. **Driver Alerts & Logging**
 
 * Log events (e.g., "Pedestrian ahead at 12m").
 * Use sound alerts or display overlays (if you have a screen).
