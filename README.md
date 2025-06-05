@@ -1,7 +1,130 @@
 # DriverAssistanceSystem
 System that helps drivers that doesn't have any advanced features with one camera.
 
-### Tasks
+### TODO
+Great! Let's **calibrate and set up everything** needed for your **Driver Assistance System using Raspberry Pi 5 + AI Camera + AI HAT+ (26 TOPS)**. Here's a structured checklist so you can go step-by-step and know exactly what needs to be calibrated or configured.
+
+---
+
+## ✅ **🔧 SYSTEM SETUP & CALIBRATION ROADMAP**
+
+---
+
+### 1. **Raspberry Pi Setup**
+
+* [ ] ✅ Flash Raspberry Pi OS (Bookworm 64-bit recommended)
+* [ ] ✅ Enable SSH, set username/password via Raspberry Pi Imager (Advanced Settings)
+* [ ] ✅ Connect to Wi-Fi / Ethernet and verify IP (`ssh pi@raspberrypi.local`)
+* [ ] ✅ Update your Pi:
+
+  ```bash
+  sudo apt update && sudo apt upgrade -y
+  ```
+
+---
+
+### 2. **AI HAT+ Setup (26 TOPS Accelerator)**
+
+* [ ] ✅ Mount the AI HAT+ on the Raspberry Pi GPIO
+* [ ] ✅ Install drivers and libraries (depending on the chip — provide model for exact commands)
+* [ ] ✅ Verify hardware recognition (`lsusb`, `dmesg`, or device-specific tools)
+
+---
+
+### 3. **Camera Calibration**
+
+* [ ] ✅ Connect AI camera to CSI or USB port (depends on your module)
+* [ ] ✅ Install camera libraries:
+
+  ```bash
+  sudo apt install libcamera-apps
+  ```
+* [ ] ✅ Test camera:
+
+  ```bash
+  libcamera-still -o test.jpg
+  ```
+* [ ] ✅ Perform lens calibration (for AI vision):
+
+  * Use OpenCV's camera calibration scripts (checkerboard method)
+  * Store `camera_matrix` and `distortion_coeffs` for future use
+
+---
+
+### 4. **Audio System Setup (Bluetooth Speaker / Audio Alerts)**
+
+* [ ] ✅ Pair and connect Bluetooth audio device:
+
+  ```bash
+  bluetoothctl
+  ```
+
+  Inside prompt:
+
+  ```bash
+  power on
+  agent on
+  scan on
+  pair XX:XX:XX:XX:XX:XX
+  trust XX:XX:XX:XX:XX:XX
+  connect XX:XX:XX:XX:XX:XX
+  ```
+* [ ] ✅ Set audio output:
+
+  ```bash
+  sudo apt install pulseaudio pulsemixer
+  ```
+* [ ] ✅ Test audio:
+
+  ```bash
+  aplay /usr/share/sounds/alsa/Front_Center.wav
+  ```
+
+---
+
+### 5. **AI Model Deployment & Calibration**
+
+* [ ] ✅ Choose model (e.g., YOLOv5/YOLOv8, MobileNet-SSD, etc.)
+* [ ] ✅ Quantize/convert model (if needed) for your AI HAT+ (provide HAT chipset details for exact tools)
+* [ ] ✅ Run test inference and verify FPS
+* [ ] ✅ Fine-tune thresholds, non-max suppression, and class labels
+
+---
+
+### 6. **Driver Assistance Features to Calibrate**
+
+Here’s what you can implement and calibrate:
+
+| Feature                         | Calibration Required                          |
+| ------------------------------- | --------------------------------------------- |
+| ✅ Lane Detection                | Camera position, angle, perspective transform |
+| ✅ Traffic Sign Detection        | Dataset + AI model + bounding box thresholds  |
+| ✅ Pedestrian Detection          | AI model confidence tuning                    |
+| ✅ Forward Collision Warning     | Object distance estimation, camera FOV        |
+| ✅ Drowsiness Detection (future) | Face landmark model, camera angle             |
+| ✅ Audio Alerts                  | Sound mapping to events, volume, speaker test |
+
+---
+
+### 7. **Code Structure & Automation**
+
+* [ ] ✅ Create a folder structure (`/home/pi/driver-assist/`)
+* [ ] ✅ Auto-start script via `systemd` or `rc.local`
+* [ ] ✅ Logs for detections, camera status, and AI events
+* [ ] ✅ Test full pipeline (camera → inference → action → audio)
+
+---
+
+### 8. **Optional Tuning**
+
+* [ ] Night-time image enhancement (low-light filtering)
+* [ ] Object distance estimation (with monocular depth inference)
+* [ ] GPS integration or inertial sensors if desired later
+
+---
+
+Would you like me to generate a GitHub-ready starter project or sample code for one of the features (e.g., lane detection or object detection with audio alerts)? Just say the word!
+
 
 
 ### Requirements:
