@@ -1,3 +1,75 @@
+# Driver Assistance System
+
+A Raspberry Pi-based driver assistance system using Hailo-8 AI accelerator for real-time detection and warnings.
+
+## Hardware Requirements
+
+- Raspberry Pi (4 or 5)
+- Hailo-8 AI Accelerator
+- Camera module
+- Bluetooth audio speaker
+
+## Software Requirements
+
+- Ubuntu 22.04 (or Hailo's Docker image on Bookworm)
+- Python 3.x
+- Hailo Runtime
+
+## Project Structure
+
+```
+DriverAssistanceSystem/
+├── main.py              # Main application entry point
+├── status/             # Hardware status management
+│   ├── __init__.py
+│   └── hardware_status.py
+├── README.md
+└── .gitignore
+```
+
+## Setup Instructions
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/DriverAssistanceSystem.git
+    cd DriverAssistanceSystem
+    ```
+
+2. Set up Python environment:
+    ```bash
+    python -m venv env
+    source env/bin/activate  # On Linux/Mac
+    # or
+    .\env\Scripts\activate  # On Windows
+    ```
+
+3. Install dependencies (coming soon)
+
+## Usage
+
+Run the hardware check:
+```bash
+python main.py
+```
+
+The system will verify:
+- Camera connectivity
+- Hailo-8 availability
+- Audio device status
+
+## Features (Planned)
+
+- Forward Collision Warning
+- Lane Departure Warning
+- Speed Sign Recognition
+- Pedestrian/Cyclist Detection
+- Traffic Light Recognition
+- Object Distance Estimation
+
+## Development Status
+
+Currently implementing hardware initialization and status checks. See ToDo.md for development roadmap.
+
 driverAssist/
 ├── assist_app/
 │   ├── __init__.py
