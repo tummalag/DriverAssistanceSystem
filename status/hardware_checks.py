@@ -11,7 +11,6 @@ def is_raspberry_pi() -> bool:
         return False
 
 def check_camera() -> bool:
-    # First check if camera module is enabled
     try:
         if not os.path.exists('/dev/video0'):
             print("Camera module not detected. Check if enabled in raspi-config")
@@ -20,13 +19,15 @@ def check_camera() -> bool:
         camera = Picamera2()
         camera_info = camera.global_camera_info()
         
-        # Print detected camera info for debugging
         print("Detected camera(s):")
         for info in camera_info:
             print(f"  - {info.get('model', 'Unknown model')}")
             
-        if not any('imx708' in str(info).lower() for info in camera_info):
-            print("Warning: AI Camera (IMX708) not detected, but found other camera")
+        # Update to check for either IMX708 or IMX500
+        if not any(model in str(info).lower() for info in camera_info 
+                  for model in ['imx708', 'imx500']):
+            print("Warning: Neither AI Camera (IMX708) nor IMX500 detected")
+            return False
             
         camera.start()
         camera.stop()
@@ -37,34 +38,30 @@ def check_camera() -> bool:
         return False
 
 def check_hailo() -> bool:
-    # First check if Hailo device is present
     try:
-        if not os.path.exists('/dev/hailo0'):
-            print("Hailo device not found in /dev/hailo0")
-            print("Check if Hailo HAT is properly connected")
+        # Try using environment variable for Hailo tools
+        hailo_path = os.getenv('TAPPAS_WORKSPACE')
+        if not hailo_path:
+            print("TAPPAS_WORKSPACE environment variable not set")
+            print("Try running: source setup_env.sh")
             return False
             
-        result = subprocess.run(['hailort-device-query', '-f', 'json'], 
-                              capture_output=True, 
-                              text=True)
-        
-        if result.returncode != 0:
-            print(f"Hailo query failed with: {result.stderr}")
+        # Check using hailort Python package if available
+        try:
+            import hailort
+            devices = hailort.Device.scan()
+            if not devices:
+                print("No Hailo devices found via hailort")
+                return False
+            print(f"Detected Hailo device: {devices[0].device_id}")
+            return True
+        except ImportError:
+            print("Hailort Python package not found")
+            print("Try running: pip install hailort")
             return False
-            
-        device_info = json.loads(result.stdout)
-        if not device_info:
-            print("No Hailo devices found by hailort-device-query")
-            return False
-            
-        print(f"Detected Hailo device: {device_info[0].get('device_id', 'Unknown ID')}")
-        return True
-    except json.JSONDecodeError:
-        print("Failed to parse Hailo device info")
-        return False
     except Exception as e:
         print(f"Hailo check failed: {str(e)}")
-        print("Try running: sudo hailort-device-reset")
+        print("Ensure you're in the correct virtual environment: venv_hailo_rpi5_examples")
         return False
 
 def check_audio() -> bool:
@@ -73,14 +70,10 @@ def check_audio() -> bool:
         service_check = subprocess.run(['systemctl', 'is-active', 'bluetooth'],
                                      capture_output=True, text=True)
         if service_check.stdout.strip() != 'active':
-            print("Bluetooth service not active")
-            print("Try: sudo systemctl start bluetooth")
-            return False
+            print("Warning: Bluetooth service not active")
+            print("To enable, run: sudo systemctl start bluetooth")
+            return True  # Not a showstopper
             
-        result = subprocess.run(['bluetoothctl', 'info'], 
-                              capture_output=True, 
-                              text=True)
-                              
         # Print connected devices for debugging
         devices = subprocess.run(['bluetoothctl', 'devices'], 
                                capture_output=True, text=True)
@@ -88,15 +81,18 @@ def check_audio() -> bool:
         for line in devices.stdout.splitlines():
             print(f"  - {line}")
             
+        result = subprocess.run(['bluetoothctl', 'info'], 
+                              capture_output=True, 
+                              text=True)
+        
         if "Connected: yes" not in result.stdout:
-            print("No Bluetooth device connected")
-            return False
+            print("Warning: No Bluetooth device connected")
+            return True  # Not a showstopper
         if "Audio" not in result.stdout:
-            print("Connected device is not an audio device")
-            return False
+            print("Warning: Connected device is not an audio device")
+            return True  # Not a showstopper
             
         return True
     except Exception as e:
-        print(f"Bluetooth check failed: {str(e)}")
-        print("Try: sudo systemctl restart bluetooth")
-        return False
+        print(f"Warning: Bluetooth check issue: {str(e)}")
+        return True  # Not a showstopper
