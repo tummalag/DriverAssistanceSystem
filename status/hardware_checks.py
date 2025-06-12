@@ -2,6 +2,7 @@ from picamera2 import Picamera2
 import subprocess
 import json
 import os
+from hailo_platform import Device
 
 def is_raspberry_pi() -> bool:
     try:
@@ -39,29 +40,13 @@ def check_camera() -> bool:
 
 def check_hailo() -> bool:
     try:
-        # Try using environment variable for Hailo tools
-        hailo_path = os.getenv('TAPPAS_WORKSPACE')
-        if not hailo_path:
-            print("TAPPAS_WORKSPACE environment variable not set")
-            print("Try running: source setup_env.sh")
-            return False
-            
-        # Check using hailort Python package if available
-        try:
-            import hailort
-            devices = hailort.Device.scan()
-            if not devices:
-                print("No Hailo devices found via hailort")
-                return False
-            print(f"Detected Hailo device: {devices[0].device_id}")
-            return True
-        except ImportError:
-            print("Hailort Python package not found")
-            print("Try running: pip install hailort")
-            return False
+        device = Device()
+        print("✅ Hailo device connected")
+        device.close()
+        return True
     except Exception as e:
-        print(f"Hailo check failed: {str(e)}")
-        print("Ensure you're in the correct virtual environment: venv_hailo_rpi5_examples")
+        print(f"❌ Hailo device not connected: {str(e)}")
+        print("Ensure Hailo device is properly connected to the board")
         return False
 
 def check_audio() -> bool:
