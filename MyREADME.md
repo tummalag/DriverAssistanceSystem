@@ -193,3 +193,75 @@ Would you like me to generate a GitHub-ready starter project or sample code for 
 * Use sound alerts or display overlays (if you have a screen).
 
 ---
+
+1. Define Clear Goals & Use Cases
+
+    What core features do you want initially? (e.g., object detection, collision warning, speed sign detection)
+
+    What hardware will be involved? (IMX500 AI Camera, Hailo AI HAT+, Raspberry Pi 5)
+
+    How should the system notify the driver? (Bluetooth audio, CLI print, future display)
+
+    Requirements for redundancy and fail-safe operation
+
+2. Design a Modular Software Architecture
+
+    Detection Layer:
+    Independent modules for each AI pipeline (IMX500 AI camera pipeline & Hailo TAPPAS pipeline). Each module handles its own hardware, runs inference, and produces detection outputs.
+
+    Fusion Layer:
+    Combine detections from both pipelines — e.g., match object bounding boxes by location/time, merge confidence scores, filter duplicates.
+
+    Notification Layer:
+    Abstract interface to send alerts via Bluetooth speaker, CLI output, and potential future UI.
+
+    Hardware Status & Health Monitor:
+    Monitor each hardware unit’s connectivity and readiness; raise status flags if any module fails.
+
+3. Plan Data Structures & Communication
+
+    Define a common Detection Object structure with fields like:
+
+        Object Type (e.g., pedestrian, stop sign)
+
+        Bounding Box Coordinates
+
+        Confidence Score
+
+        Timestamp
+
+        Source (AI Camera / Hailo TAPPAS)
+
+    Communication between modules via queues or callbacks, so they remain loosely coupled.
+
+4. Develop & Test Core Modules Independently
+
+    Start by getting each pipeline running separately with simple output (e.g., print detected objects).
+
+    Implement health checks for hardware readiness.
+
+    Validate output formats and timings.
+
+5. Implement Fusion & Notification Logic
+
+    Fuse detection outputs from both sources, decide priority (e.g., trust Hailo if confidence > 0.7, else fallback to AI camera).
+
+    Trigger notifications accordingly.
+
+    Keep notification logic extensible (e.g., add display output in future).
+
+6. Iterate & Optimize
+
+    Profile performance (CPU, memory, latency).
+
+    Optimize pipeline parameters or scheduling.
+
+    Add new features step-by-step, e.g., traffic sign detection, lane detection.
+
+7. Maintain Clear Code Structure & Version Control
+
+    Use meaningful naming conventions (snake_case for variables/functions, PascalCase for classes, ALL_CAPS for constants).
+
+    Document each module with README or docstrings.
+
+    Use git branches for features and merge carefully.
