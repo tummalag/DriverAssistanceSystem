@@ -27,3 +27,25 @@ class Camera:
         
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
+        
+    def stream(self):
+        """Stream video from camera to window"""
+        try:
+            print("Starting video stream. Press 'q' to exit.")
+            cv2.namedWindow("Camera Feed", cv2.WINDOW_NORMAL)
+            
+            while True:
+                frame = self.get_frame()
+                
+                # Convert from RGB to BGR for OpenCV display
+                frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                
+                # Display the frame
+                cv2.imshow("Camera Feed", frame_bgr)
+                
+                # Break loop on 'q' press
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+                    
+        finally:
+            cv2.destroyAllWindows()
