@@ -42,7 +42,6 @@ def check_hailo() -> bool:
     try:
         device = Device()
         print("✅ Hailo device connected")
-        device.close()
         return True
     except Exception as e:
         print(f"❌ Hailo device not connected: {str(e)}")
